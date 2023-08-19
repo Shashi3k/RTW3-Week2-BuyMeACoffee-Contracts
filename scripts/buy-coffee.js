@@ -2,7 +2,7 @@ const hre = require("hardhat");
 
 // Returns the Ether balance of a given address.
 async function getBalance(address) {
-  const balanceBigInt = await hre.waffle.provider.getBalance(address);
+  const balanceBigInt = await hre.waffle.provider.getBalance(address); /doesn't work for some reason
   return hre.ethers.utils.formatEther(balanceBigInt);
 }
 
@@ -33,13 +33,11 @@ async function main() {
   // We get the contract to deploy.
   const BuyMeACoffee = await hre.ethers.getContractFactory("BuyMeACoffee");
   const buyMeACoffee = await BuyMeACoffee.deploy();
-
-  // Deploy the contract.
-  await buyMeACoffee.deployed();
-  console.log("BuyMeACoffee deployed to:", buyMeACoffee.address);
+  const {target} = buyMeACoffee
+  console.log("BuyMeACoffee deployed to:", target);
 
   // Check balances before the coffee purchase.
-  const addresses = [owner.address, tipper.address, buyMeACoffee.address];
+  const addresses = [owner.address, tipper.address, target];
   console.log("== start ==");
   await printBalances(addresses);
 
